@@ -1,0 +1,21 @@
+{
+  "name": "attendance-management-system",
+  "version": "1.0.0",
+  "description": "Comprehensive attendance management system with web dashboard",
+  "main": "node-backend/server.js",
+  "scripts": {
+    "start": "cd node-backend && npm install && node server.js",
+    "build": "cd react-dashboard && npm install && npm run build",
+    "dev": "concurrently \"cd node-backend && npm run dev\" \"cd react-dashboard && npm start\"",
+    "install-deps": "cd node-backend && npm install && cd ../react-dashboard && npm install"
+  },
+  "keywords": ["attendance", "management", "dashboard", "education"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

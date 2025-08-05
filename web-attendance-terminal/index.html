@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Marking Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .terminal-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .terminal-status {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .operator-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .operator-name {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .login-form {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .login-card button:hover {
+            background: #5a67d8;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        .video-section {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls-section {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+
+        #video {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .class-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .class-selector label {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .class-selector select {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .status-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .status-value {
+            font-weight: bold;
+        }
+
+        .attendance-log {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .log-entry.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .log-entry.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .recognition-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .face-box {
+            position: absolute;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .face-label {
+            position: absolute;
+            background: #4CAF50;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            top: -25px;
+            left: 0;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #4CAF50;
+        }
+
+        .notification.error {
+            background: #f44336;
+        }
+
+        .notification.info {
+            background: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div id="loginForm" class="login-form">
+        <div class="login-card">
+            <h2>🎓 Attendance Terminal Login</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Enter your name to start attendance session</p>
+            <input type="text" id="operatorName" placeholder="Enter your name" maxlength="50">
+            <button id="loginBtn">Login</button>
+            <div id="debugInfo" style="margin-top: 15px; padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; font-family: monospace; font-size: 11px; color: #495057;">
+                <strong>DEBUG STATUS:</strong><br>
+                Page loaded, waiting for login...
+            </div>
+        </div>
+    </div>
+
+    <div id="mainInterface" style="display: none;">
+        <div class="header">
+            <div class="terminal-info">
+                <div class="terminal-id">Attendance Terminal #<span id="terminalId">001</span></div>
+                <div class="terminal-status">Status: <span id="terminalStatus">Initializing...</span></div>
+            </div>
+            <div class="operator-info">
+                <div class="operator-name">Operator: <span id="operatorStatus">Not logged in</span></div>
+                <button id="logoutBtn" class="logout-btn">Logout</button>
+            </div>
+            <div class="connection-status">
+                <span id="connectionStatus">🔴 Disconnected</span>
+            </div>
+        </div>
+
+        <div class="main-container">
+            <div class="video-section">
+                <div style="position: relative;">
+                    <video id="video" autoplay muted playsinline></video>
+                    <canvas id="overlay" class="recognition-overlay"></canvas>
+                </div>
+                <div class="video-controls">
+                    <button id="startBtn" class="btn btn-primary">Start Camera</button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>Stop Camera</button>
+                    <button id="toggleRecognition" class="btn btn-secondary" disabled>Start Recognition</button>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="class-selector">
+                    <label for="classSelect">Select Class:</label>
+                    <select id="classSelect">
+                        <option value="">Select a class...</option>
+                    </select>
+                </div>
+
+                <div class="auto-mode">
+                    <label style="color: white; display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0;">
+                        <input type="checkbox" id="autoModeToggle">
+                        <span>🤖 Auto Mode (Smart Scheduling)</span>
+                    </label>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 1rem;">
+                        Automatically switch classes and manage camera based on timetable
+                    </p>
+                </div>
+
+                <div class="status-panel">
+                    <h3 style="color: white; margin-bottom: 1rem;">System Status</h3>
+                    <div class="status-item">
+                        <span>Camera:</span>
+                    <span class="status-value" id="cameraStatus">Off</span>
+                </div>
+                <div class="status-item">
+                    <span>Recognition:</span>
+                    <span class="status-value" id="recognitionStatus">Off</span>
+                </div>
+                <div class="status-item">
+                    <span>Active Class:</span>
+                    <span class="status-value" id="activeClass">None</span>
+                </div>
+                <div class="status-item">
+                    <span>Students Detected:</span>
+                    <span class="status-value" id="studentsDetected">0</span>
+                </div>
+                <div class="status-item">
+                    <span>Attendance Marked:</span>
+                    <span class="status-value" id="attendanceMarked">0</span>
+                </div>
+            </div>
+
+            <div class="attendance-log">
+                <h3 style="color: white; margin-bottom: 1rem;">Recent Activity</h3>
+                <div id="logContainer">
+                    <div class="log-entry">System initialized</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="attendance-terminal.js"></script>
+</body>
+</html>
