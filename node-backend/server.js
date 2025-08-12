@@ -26,12 +26,18 @@ const server = http.createServer(app);
 // Middleware
 app.use(helmet());
 app.use(morgan('combined'));
-app.use(cors({
-    origin: [
+
+// Dynamic CORS configuration for production
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || '').split(',').filter(Boolean)
+    : [
         process.env.FRONTEND_URL || 'http://localhost:3000',
         'http://localhost:3002',  // Web attendance terminals
         'http://localhost:3005'   // Additional React dashboard port
-    ],
+    ];
+
+app.use(cors({
+    origin: allowedOrigins,
     credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -43,6 +49,15 @@ const limiter = rateLimit({
     max: 100 // limit each IP to 100 requests per windowMs
 });
 app.use('/api/', limiter);
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
 
 // Database connection
 const dbConfig = {
@@ -756,7 +771,73 @@ app.post('/api/activity-log', authenticateToken, [
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
+    res.json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
+// Database health check endpoint
+app.get('/api/health/db', async (req, res) => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        await connection.execute('SELECT 1');
+        await connection.end();
+        res.json({ 
+            database: 'connected',
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Database health check failed:', error);
+        res.status(500).json({ 
+            database: 'error', 
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+// Attendance summary endpoint
+app.get('/api/attendance/summary', authenticateToken, async (req, res) => {
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+        
+        // Get summary statistics
+        const [summaryResult] = await connection.execute(`
+            SELECT 
+                COUNT(DISTINCT student_id) as total_students,
+                COUNT(*) as total_attendance_records,
+                COUNT(DISTINCT class_id) as classes_with_attendance,
+                DATE(MIN(marked_at)) as first_attendance,
+                DATE(MAX(marked_at)) as last_attendance
+            FROM attendance
+        `);
+        
+        // Get recent attendance
+        const [recentResult] = await connection.execute(`
+            SELECT 
+                a.marked_at,
+                s.name as student_name,
+                c.class_name as class_name
+            FROM attendance a
+            JOIN students s ON a.student_id = s.student_id
+            JOIN classes c ON a.class_id = c.id
+            ORDER BY a.marked_at DESC
+            LIMIT 10
+        `);
+        
+        await connection.end();
+        
+        res.json({
+            summary: summaryResult[0] || {},
+            recent_attendance: recentResult || []
+        });
+    } catch (error) {
+        console.error('Attendance summary error:', error);
+        res.status(500).json({ error: 'Failed to get attendance summary' });
+    }
 });
 
 // Camera and System Control Endpoints - DISABLED for stability
@@ -1458,3 +1539,4 @@ server.listen(PORT, () => {
 });
 
 module.exports = app;
+

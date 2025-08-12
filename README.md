@@ -1,309 +1,235 @@
-# 🎓 Attendance Management System
+# Attendance Management System
 
-A comprehensive web-based attendance management system with AI-powered face recognition, real-time monitoring, and automated email reports.
+A face recognition-based attendance system with web dashboard.
 
-## ✨ Features
+## 🚀 Quick Start (Single Command)
 
-### 🤖 AI-Powered Face Recognition
-- Real-time face detection and recognition using OpenCV and Python
-- 128-dimensional face encoding for accurate student identification
-- Configurable confidence thresholds for reliable attendance marking
+### Option 1: PowerShell Script (Recommended)
+```powershell
+# Start all services including Python camera system
+.\start-system.ps1
 
-### 📱 Web-Based Terminals
-- Modern web interface for attendance marking
-- WebRTC camera integration for live video feed
-- Real-time synchronization across multiple terminals
-- Touch-friendly responsive design
+# Start without Python camera system
+.\start-system.ps1 -SkipPython
 
-### 🎛️ Admin Dashboard
-- Beautiful React-based admin interface with Material-UI
-- Real-time attendance monitoring and statistics
-- Student and class management
-- Comprehensive reporting with data visualization
-- Excel export functionality
-
-### 📧 Email Reports
-- Automated personalized attendance reports for students
-- Professional HTML email templates
-- Flexible targeting (all students or specific classes)
-- Custom message support
-- Gmail/Outlook/Yahoo integration
-
-### 🔄 Real-Time Communication
-- WebSocket-based live updates
-- Cross-terminal synchronization
-- Real-time dashboard statistics
-- Live attendance marking notifications
-
-### 🔐 Security Features
-- JWT-based authentication
-- Role-based access control
-- SQL injection prevention
-- XSS protection
-- Rate limiting
-- Secure file upload validation
-
-## 🏗️ System Architecture
-
-### Multi-Tier Architecture
-- **Frontend**: React.js dashboard + Vanilla JS terminals
-- **Backend**: Node.js/Express.js API server
-- **Database**: MySQL with normalized schema
-- **AI Engine**: Python face recognition system
-- **Communication**: REST APIs + WebSocket real-time updates
-
-### Technology Stack
-
-#### Frontend
-- **React 18** with Hooks and Context API
-- **Material-UI (MUI)** for component library
-- **Recharts** for data visualization
-- **Axios** for HTTP requests
-- **React Router** for navigation
-- **WebRTC** for camera access
-
-#### Backend
-- **Node.js** runtime environment
-- **Express.js** web framework
-- **MySQL2** database driver with connection pooling
-- **WebSocket (ws)** for real-time communication
-- **JWT** for authentication
-- **Nodemailer** for email functionality
-- **Multer** for file uploads
-
-#### AI/ML
-- **Python 3.8+** runtime
-- **OpenCV** for computer vision
-- **face_recognition** library (dlib wrapper)
-- **NumPy** for numerical operations
-
-#### Database
-- **MySQL 8.0+** with InnoDB engine
-- **Normalized schema** (3NF)
-- **Indexed queries** for performance
-- **Foreign key constraints** for data integrity
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ and npm
-- Python 3.8+ with pip
-- MySQL 8.0+
-- Modern web browser with WebRTC support
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/yourusername/attendance-management-system.git
-cd attendance-management-system
+# Show help
+.\start-system.ps1 -Help
 ```
 
-### 2. Database Setup
-```bash
-# Import database schema
-mysql -u root -p < database/schema.sql
+### Option 2: Batch File
+```batch
+# Double-click or run from command prompt
+start-system.bat
 ```
 
-### 3. Backend Setup
+### Option 3: NPM Scripts
 ```bash
-cd node-backend
-npm install
+# Install all dependencies
+npm run install:all
 
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your database and email settings
+# Start backend, frontend, and terminal (without Python)
+npm run dev
 
-npm start
+# Start complete system using PowerShell script
+npm run system:start
+
+# Start system without Python camera
+npm run system:start-no-python
 ```
 
-### 4. Frontend Setup
-```bash
-cd react-dashboard
-npm install
-npm start
-```
+## 📱 Access Points
 
-### 5. Web Terminal Setup
-```bash
-cd web-attendance-terminal
-npm install
-npm start
-```
+After running any startup method:
 
-### 6. Python Face Recognition Setup
-```bash
-cd python-camera-system
-pip install -r requirements.txt
+- **Dashboard**: http://localhost:3000
+- **Backend API**: http://localhost:3001
+- **Web Terminal**: http://localhost:3002
 
-# Configure Python environment variables
-cp .env.example .env
-# Edit .env with your database settings
-```
+**Default Login**: 
+- Username: `admin`
+- Password: `admin123`
 
-## ⚙️ Configuration
+## 🔧 Manual Setup (If needed)
 
-### Environment Variables
+1. **Database Setup**
+   ```bash
+   mysql -u root -p < database/schema.sql
+   ```
 
-#### Backend (.env)
-```bash
-# Database
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=yourpassword
-DB_NAME=attendance_system
+2. **Backend**
+   ```bash
+   cd node-backend
+   npm install
+   npm run dev
+   ```
 
-# JWT
-JWT_SECRET=your_jwt_secret_key
+3. **Frontend**
+   ```bash
+   cd react-dashboard
+   npm install
+   npm start
+   ```
 
-# Email (Optional)
-EMAIL_SERVICE=gmail
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
+4. **Web Terminal**
+   ```bash
+   cd web-attendance-terminal
+   npm install
+   npm start
+   ```
 
-# Server
-PORT=3001
+5. **Python Face Recognition**
+   ```bash
+   cd python-camera-system
+   pip install -r requirements.txt
+   python fixed_attendance_system.py
+   ```
+
+## 🛠️ System Components
+
+### Startup Scripts
+- `start-system.ps1` - PowerShell script with advanced features
+- `start-system.bat` - Simple batch file for quick startup
+- `package.json` - NPM scripts for development
+
+### Services
+1. **Backend API** (Port 3001)
+   - Node.js/Express server
+   - MySQL database connection
+   - Authentication & authorization
+   - REST API endpoints
+
+2. **React Dashboard** (Port 3000)
+   - Modern web interface
+   - Student management
+   - Class scheduling
+   - Attendance reports
+
+3. **Web Terminal** (Port 3002)
+   - Browser-based attendance marking
+   - Real-time updates
+   - WebSocket communication
+
+4. **Python Camera System**
+   - Face recognition using OpenCV
+   - Real-time attendance marking
+   - Camera integration
+
+## 🔑 Features
+
+### PowerShell Script Features
+- ✅ Automatic dependency installation
+- ✅ Port conflict detection
+- ✅ Service status monitoring
+- ✅ Interactive control (quit, status, logs)
+- ✅ Browser auto-launch
+- ✅ Colored output for better UX
+- ✅ Error handling and recovery
+
+### Batch Script Features
+- ✅ Simple one-click startup
+- ✅ Dependency installation
+- ✅ Service startup in separate windows
+- ✅ Browser auto-launch
+- ✅ User-friendly interface
+
+## 📋 Commands (PowerShell Script)
+
+When running `start-system.ps1`, you can use these interactive commands:
+
+- `q` + Enter - Quit all services
+- `s` + Enter - Show service status
+- `l` + Enter - Show recent service logs
+- `o` + Enter - Open dashboard in browser
+
+## 🔧 Configuration
+
+Configure `.env` files in each directory with your database credentials and settings:
+
+### node-backend/.env
+```env
 NODE_ENV=development
-```
-
-#### Python (.env)
-```bash
-# Database connection
+PORT=3001
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=attendance_system
+JWT_SECRET=your-jwt-secret
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
 ```
 
-### Email Setup (Optional)
-For Gmail integration:
-1. Enable 2-factor authentication
-2. Generate app password
-3. Use app password in EMAIL_PASSWORD
-
-## 📊 API Endpoints
-
-### Authentication
-- `POST /api/auth/login` - Admin login
-
-### Students
-- `GET /api/students` - List all students
-- `POST /api/students` - Add new student
-- `POST /api/students/with-photo` - Add student with photo
-- `DELETE /api/students/:id` - Delete student
-
-### Classes
-- `GET /api/classes` - List all classes
-- `POST /api/classes` - Create new class
-- `DELETE /api/classes/:id` - Delete class
-
-### Attendance
-- `GET /api/attendance/class/:classId` - Class attendance
-- `POST /api/process-frame` - Process camera frame
-- `GET /api/reports/attendance` - Attendance reports
-
-### Email
-- `POST /api/send-attendance-email` - Send email reports
-- `GET /api/email/status` - Email configuration status
-
-## 🗄️ Database Schema
-
-### Core Tables
-- **students**: Student information and face encodings
-- **classes**: Class schedules and details
-- **attendance**: Attendance records with timestamps
-- **activity_logs**: System activity tracking
-
-### Key Features
-- Foreign key relationships
-- Indexed columns for performance
-- Timestamp tracking
-- ACID compliance
-
-## 🔧 Development
-
-### Project Structure
-```
-attendance-system/
-├── node-backend/          # Express.js API server
-├── react-dashboard/       # Admin dashboard
-├── web-attendance-terminal/ # Attendance terminals
-├── python-camera-system/  # Face recognition
-├── database/             # SQL schemas
-└── docs/                # Documentation
+### python-camera-system/.env
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=yourpassword
+DB_NAME=attendance_system
+CONFIDENCE_THRESHOLD=0.6
 ```
 
-### Running in Development
+## 🚨 Troubleshooting
+
+### Port Conflicts
+If you get port conflict errors:
+1. Check what's using the ports: `netstat -ano | findstr :3000`
+2. Kill the processes or change ports in configuration
+
+### Python Not Found
+If Python camera system fails to start:
+1. Update the Python path in `start-system.ps1`
+2. Install required Python packages: `pip install -r python-camera-system/requirements.txt`
+
+### Database Connection Issues
+1. Ensure MySQL is running
+2. Check database credentials in `.env` files
+3. Run the database schema: `mysql -u root -p < database/schema.sql`
+
+### Permission Issues (PowerShell)
+If you get execution policy errors:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+## 📁 Project Structure
+```
+attendance-management-system/
+├── start-system.ps1          # Main PowerShell startup script
+├── start-system.bat          # Batch startup script
+├── package.json              # NPM scripts and dependencies
+├── database/                 # Database schema and setup
+├── node-backend/             # Express.js API server
+├── react-dashboard/          # React.js web interface
+├── web-attendance-terminal/  # Web-based attendance terminal
+└── python-camera-system/     # Face recognition system
+```
+
+## 🎯 Usage Workflow
+
+1. **System Startup**: Run `start-system.ps1` or `start-system.bat`
+2. **Access Dashboard**: Go to http://localhost:3000
+3. **Login**: Use admin/admin123
+4. **Add Students**: Upload photos and register students
+5. **Create Classes**: Schedule classes for attendance
+6. **Start Camera**: Python system will automatically detect faces
+7. **Monitor Attendance**: View real-time attendance in dashboard
+
+## 📈 Development
+
+For development mode with hot-reloading:
 ```bash
-# Backend (Terminal 1)
-cd node-backend && npm run dev
-
-# React Dashboard (Terminal 2)
-cd react-dashboard && npm start
-
-# Web Terminal (Terminal 3)
-cd web-attendance-terminal && npm start
-
-# Python System (Terminal 4)
-cd python-camera-system && python fixed_attendance_system.py
+npm run dev
 ```
 
-## 📦 Deployment
-
-### Production Deployment
-1. **Database**: Set up MySQL server
-2. **Backend**: Deploy Node.js application
-3. **Frontend**: Build and serve React application
-4. **Web Server**: Configure Nginx reverse proxy
-5. **SSL**: Set up Let's Encrypt certificates
-
-### Docker Deployment
-```bash
-# Build and run with Docker Compose
-docker-compose up -d
-```
-
-### Cloud Deployment
-- Compatible with AWS, Google Cloud, Azure
-- Supports containerized deployment
-- Environment variable configuration
-- Horizontal scaling ready
-
-## 🔍 Troubleshooting
-
-### Common Issues
-1. **Camera not working**: Check WebRTC permissions
-2. **Face recognition errors**: Verify Python dependencies
-3. **Database connection**: Check MySQL credentials
-4. **Email not sending**: Verify SMTP configuration
-
-### Performance Optimization
-- Database indexing for large datasets
-- Image compression for face recognition
-- Connection pooling for concurrent users
-- Caching for frequent queries
+This starts backend, frontend, and terminal with automatic reloading on file changes.
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. Test with `start-system.ps1`
 5. Submit a pull request
 
+## 📄 License
 
-## 🙏 Acknowledgments
-
-- **OpenCV** community for computer vision tools
-- **face_recognition** library by Adam Geitgey
-- **Material-UI** team for beautiful React components
-- **Node.js** and **Express.js** communities
-
-## 📞 Support
-
-For support and questions:
-- Create an issue on GitHub
-- Check the documentation in `/docs`
-- Review the troubleshooting guide
-
----
-
-**Built with ❤️ for modern educational institutions**
+MIT License - see LICENSE file for details.

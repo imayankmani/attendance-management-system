@@ -1,0 +1,60 @@
+{
+    "folders": [
+        {
+            "name": "🏠 Root",
+            "path": "."
+        },
+        {
+            "name": "🔧 Backend",
+            "path": "./node-backend"
+        },
+        {
+            "name": "🌐 Frontend",
+            "path": "./react-dashboard"
+        },
+        {
+            "name": "💻 Terminal",
+            "path": "./web-attendance-terminal"
+        },
+        {
+            "name": "🐍 Python",
+            "path": "./python-camera-system"
+        },
+        {
+            "name": "🗃️ Database",
+            "path": "./database"
+        }
+    ],
+    "settings": {
+        "terminal.integrated.defaultProfile.windows": "PowerShell",
+        "files.exclude": {
+            "**/node_modules": true,
+            "**/.git": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/__pycache__": true,
+            "**/.pytest_cache": true,
+            "**/build": true,
+            "**/dist": true
+        },
+        "search.exclude": {
+            "**/node_modules": true,
+            "**/bower_components": true,
+            "**/*.code-search": true,
+            "**/build": true,
+            "**/dist": true,
+            "**/__pycache__": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-json",
+            "ms-vscode.powershell",
+            "ms-python.python",
+            "ms-python.debugpy",
+            "ms-vscode.vscode-typescript-next",
+            "bradlc.vscode-tailwindcss",
+            "esbenp.prettier-vscode"
+        ]
+    }
+}

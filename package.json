@@ -1,21 +1,23 @@
 {
   "name": "attendance-management-system",
   "version": "1.0.0",
-  "description": "Comprehensive attendance management system with web dashboard",
+  "description": "Attendance management system with face recognition",
   "main": "node-backend/server.js",
   "scripts": {
-    "start": "cd node-backend && npm install && node server.js",
-    "build": "cd react-dashboard && npm install && npm run build",
-    "dev": "concurrently \"cd node-backend && npm run dev\" \"cd react-dashboard && npm start\"",
-    "install-deps": "cd node-backend && npm install && cd ../react-dashboard && npm install"
-  },
-  "keywords": ["attendance", "management", "dashboard", "education"],
-  "author": "Your Name",
-  "license": "MIT",
-  "engines": {
-    "node": ">=16.0.0"
+    "start": "cd node-backend && npm start",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:terminal\"",
+    "dev:backend": "cd node-backend && npm run dev",
+    "dev:frontend": "cd react-dashboard && npm start",
+    "dev:terminal": "cd web-attendance-terminal && npm start",
+    "install:all": "npm install && cd node-backend && npm install && cd ../react-dashboard && npm install && cd ../web-attendance-terminal && npm install",
+    "build:all": "cd react-dashboard && npm run build && cd ../web-attendance-terminal && npm run build",
+    "system:start": "powershell -ExecutionPolicy Bypass -File ./start-system.ps1",
+    "system:start-no-python": "powershell -ExecutionPolicy Bypass -File ./start-system.ps1 -SkipPython"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
-  }
+    "concurrently": "^8.2.0"
+  },
+  "keywords": ["attendance", "management", "face-recognition"],
+  "author": "Attendance System",
+  "license": "MIT"
 }

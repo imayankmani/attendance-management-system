@@ -1,0 +1,43 @@
+# Railway Deployment Configuration
+services:
+  # Backend API Service
+  backend:
+    source: node-backend/
+    buildCommand: npm install
+    startCommand: npm start
+    healthcheckPath: /api/health
+    variables:
+      NODE_ENV: production
+      PORT: 3001
+    
+  # Frontend Service  
+  frontend:
+    source: react-dashboard/
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s build -l 3000
+    variables:
+      NODE_ENV: production
+      PORT: 3000
+      
+  # Web Terminal Service
+  terminal:
+    source: web-attendance-terminal/
+    buildCommand: npm install
+    startCommand: npm start
+    variables:
+      NODE_ENV: production
+      PORT: 3002
+      
+  # Python Camera Service (Optional)
+  camera:
+    source: python-camera-system/
+    buildCommand: pip install -r requirements.txt
+    startCommand: python fixed_attendance_system.py
+    variables:
+      ENVIRONMENT: production
+      DISABLE_CAMERA: true
+
+# Database
+database:
+  type: mysql
+  name: attendance_system

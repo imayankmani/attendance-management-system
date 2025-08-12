@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  database:
+    image: mysql:8.0
+    container_name: attendance_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Backend API
+  backend:
+    build: ./node-backend
+    container_name: attendance_backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=database
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./node-backend/uploads:/app/uploads
+
+  # React Frontend
+  frontend:
+    build: ./react-dashboard
+    container_name: attendance_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Web Terminal
+  web-terminal:
+    build: ./web-attendance-terminal
+    container_name: attendance_terminal
+    ports:
+      - "3002:3002"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Python Camera System (optional)
+  camera-system:
+    build: ./python-camera-system
+    container_name: attendance_camera
+    environment:
+      - DB_HOST=database
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+    devices:
+      - /dev/video0:/dev/video0  # Camera access
+    volumes:
+      - ./python-camera-system/uploads:/app/uploads
+
+volumes:
+  db_data:
