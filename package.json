@@ -4,7 +4,8 @@
   "description": "Attendance management system with face recognition",
   "main": "node-backend/server.js",
   "scripts": {
-    "start": "cd node-backend && npm start",
+    "start": "cd node-backend && npm install && npm start",
+    "build": "cd node-backend && npm install",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:terminal\"",
     "dev:backend": "cd node-backend && npm run dev",
     "dev:frontend": "cd react-dashboard && npm start",
